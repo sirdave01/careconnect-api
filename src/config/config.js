@@ -26,19 +26,19 @@ export const config = {
         process.env.JWT_SECRET,
 
 
-    githubClientId:
-        process.env.GITHUB_CLIENT_ID,
+    googleClientId:
+        process.env.GOOGLE_CLIENT_ID,
 
 
-    githubClientSecret:
-        process.env.GITHUB_CLIENT_SECRET,
+    googleClientSecret:
+        process.env.GOOGLE_CLIENT_SECRET,
 
 
-    githubCallbackUrl:
+    googleCallbackUrl:
         process.env.NODE_ENV === "production"
 
-            ? process.env.GITHUB_CALLBACK_URL_PRODUCTION
+            ? process.env.GOOGLE_CALLBACK_URL_PRODUCTION
 
-            : process.env.GITHUB_CALLBACK_URL_LOCAL
+            : process.env.GOOGLE_CALLBACK_URL_LOCAL
 
 };
