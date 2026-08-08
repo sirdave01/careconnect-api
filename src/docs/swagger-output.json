@@ -1,0 +1,667 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "CareConnect Healthcare API",
+    "description": "REST API for the CareConnect Healthcare Appointment and Patient Management System.\n\n## Environments\n\n**Local (current):**\n`http://localhost:3000`\n\n**Production (Render):**\n`https://YOUR-CARECONNECT-API.onrender.com`\n\nWhen you deploy, change the `host` and `schemes` fields below to the production values.\n\n---\n\n## Authentication\nCareConnect uses Passport.js + Google OAuth (session cookie).\n\n1. Visit `/api/auth/google` in the browser (do **not** use Try it out).\n2. Sign in with Google.\n3. You will be redirected back and a session cookie (`connect.sid`) is set.\n4. Protected endpoints can now be tested in Swagger UI.\n\n## Auth Endpoints\n- Google Login: `/api/auth/google`\n- Google Callback: `/api/auth/google/callback`\n- Logout: `/api/auth/logout`\n- Current User: `/api/auth/me`",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "sessionAuth": {
+      "type": "apiKey",
+      "name": "connect.sid",
+      "in": "cookie",
+      "description": "Passport authentication session cookie"
+    }
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["System"],
+        "summary": "API root",
+        "responses": {
+          "200": {
+            "description": "API is running"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Health check",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/database-check": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Database connection check",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/auth/google": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Start Google OAuth login",
+        "description": "Redirects the browser to Google. Do NOT use 'Try it out' – open this URL in a new browser tab.",
+        "responses": {
+          "302": {
+            "description": "Redirect to Google"
+          }
+        }
+      }
+    },
+    "/api/auth/google/callback": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Google OAuth callback",
+        "description": "Handled automatically by Passport after Google login.",
+        "responses": {
+          "302": {
+            "description": "Redirect after successful login"
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Logout",
+        "responses": {
+          "200": {
+            "description": "Logged out successfully"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get current authenticated user",
+        "responses": {
+          "200": {
+            "description": "Authenticated user data"
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        }
+      }
+    },
+
+    "/api/users/": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all users",
+        "responses": {
+          "200": {
+            "description": "List of users"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a new user (mainly for testing)",
+        "description": "Normally users are created by Google OAuth. Use this only for local testing.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get a single user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update a user",
+        "security": [{ "sessionAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User updated"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete a user",
+        "security": [{ "sessionAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+
+    "/api/patients/": {
+      "get": {
+        "tags": ["Patients"],
+        "summary": "Get all patients",
+        "responses": {
+          "200": {
+            "description": "List of patients"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Patients"],
+        "summary": "Create a new patient",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Patient"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Patient created"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/patients/{id}": {
+      "get": {
+        "tags": ["Patients"],
+        "summary": "Get a single patient",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Patient found"
+          },
+          "404": {
+            "description": "Patient not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Patients"],
+        "summary": "Update a patient",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Patient"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Patient updated"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Patients"],
+        "summary": "Delete a patient",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Patient deleted"
+          }
+        }
+      }
+    },
+
+    "/api/doctors/": {
+      "get": {
+        "tags": ["Doctors"],
+        "summary": "Get all doctors",
+        "responses": {
+          "200": {
+            "description": "List of doctors"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Doctors"],
+        "summary": "Create a new doctor",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Doctor"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Doctor created"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/doctors/{id}": {
+      "get": {
+        "tags": ["Doctors"],
+        "summary": "Get a single doctor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Doctor found"
+          },
+          "404": {
+            "description": "Doctor not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Doctors"],
+        "summary": "Update a doctor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Doctor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Doctor updated"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Doctors"],
+        "summary": "Delete a doctor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Doctor deleted"
+          }
+        }
+      }
+    },
+
+    "/api/appointments/": {
+      "get": {
+        "tags": ["Appointments"],
+        "summary": "Get all appointments",
+        "responses": {
+          "200": {
+            "description": "List of appointments"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Appointments"],
+        "summary": "Create a new appointment",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Appointment"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Appointment created"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/appointments/{id}": {
+      "get": {
+        "tags": ["Appointments"],
+        "summary": "Get a single appointment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointment found"
+          },
+          "404": {
+            "description": "Appointment not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Appointments"],
+        "summary": "Update an appointment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Appointment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointment updated"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Appointments"],
+        "summary": "Delete an appointment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointment deleted"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "example": "David"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Caleb"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "example": "david@example.com"
+        },
+        "role": {
+          "type": "string",
+          "example": "patient",
+          "enum": ["patient", "doctor", "admin"]
+        },
+        "googleId": {
+          "type": "string",
+          "example": "112233445566778899"
+        },
+        "profileImage": {
+          "type": "string",
+          "example": "https://lh3.googleusercontent.com/a/..."
+        }
+      }
+    },
+    "Patient": {
+      "type": "object",
+      "required": ["userId", "firstName", "lastName"],
+      "properties": {
+        "userId": {
+          "type": "string",
+          "example": "66a7429b3e1791b9229caa5b3"
+        },
+        "firstName": {
+          "type": "string",
+          "example": "John"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "gender": {
+          "type": "string",
+          "example": "male"
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "format": "date",
+          "example": "1995-05-20"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "example": "+2348012345678"
+        },
+        "address": {
+          "type": "string",
+          "example": "Lagos, Nigeria"
+        },
+        "bloodType": {
+          "type": "string",
+          "example": "O+"
+        },
+        "emergencyContact": {
+          "type": "string",
+          "example": "+2348098765432"
+        },
+        "medicalHistory": {
+          "type": "string",
+          "example": "No known allergies"
+        }
+      }
+    },
+    "Doctor": {
+      "type": "object",
+      "required": ["userId", "firstName", "lastName", "specialization"],
+      "properties": {
+        "userId": {
+          "type": "string",
+          "example": "66a7429b3e1791b9229caa5b3"
+        },
+        "firstName": {
+          "type": "string",
+          "example": "Sarah"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Williams"
+        },
+        "specialization": {
+          "type": "string",
+          "example": "Cardiology"
+        },
+        "licenseNumber": {
+          "type": "string",
+          "example": "MD-123456"
+        },
+        "yearsOfExperience": {
+          "type": "number",
+          "example": 8
+        },
+        "hospital": {
+          "type": "string",
+          "example": "Lagos University Teaching Hospital"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "example": "+2348012345678"
+        },
+        "availability": {
+          "type": "string",
+          "example": "Available"
+        }
+      }
+    },
+    "Appointment": {
+      "type": "object",
+      "required": ["patientId", "doctorId", "appointmentDate", "appointmentTime"],
+      "properties": {
+        "patientId": {
+          "type": "string",
+          "example": "66a7429b3e1791b9229caa5b3"
+        },
+        "doctorId": {
+          "type": "string",
+          "example": "66a7429b3e1791b9229caa5b4"
+        },
+        "appointmentDate": {
+          "type": "string",
+          "format": "date",
+          "example": "2026-08-15"
+        },
+        "appointmentTime": {
+          "type": "string",
+          "example": "10:30"
+        },
+        "reason": {
+          "type": "string",
+          "example": "Routine medical consultation"
+        },
+        "status": {
+          "type": "string",
+          "example": "pending",
+          "enum": ["pending", "approved", "cancelled", "completed"]
+        },
+        "notes": {
+          "type": "string",
+          "example": "Patient requested morning appointment"
+        }
+      }
+    }
+  }
+}

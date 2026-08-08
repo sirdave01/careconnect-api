@@ -5,6 +5,7 @@
 // using Google Strategy.
 // =======================================
 
+import { config } from "./config.js";
 
 import passport from "passport";
 
@@ -17,7 +18,7 @@ import {
 
 import {
     findUserByEmail,
-    createUser
+    createUser, findUserById
 } from "../repositories/userRepository.js";
 
 
@@ -62,51 +63,39 @@ passport.serializeUser(
 
 passport.deserializeUser(
 
-    async(id, done)=>{
+    async (id, done) => {
 
+        try {
 
-        try{
+            const user =
+                await findUserById(id);
 
+            if (!user) {
 
-            const user = {
+                return done(
+                    null,
+                    false
+                );
 
-                _id:id
+            }
 
-            };
-
-
-            done(
-
+            return done(
                 null,
-
                 user
-
             );
 
+        } catch (error) {
 
-        }
-
-        catch(error){
-
-
-            done(
-
+            return done(
                 error,
-
                 null
-
             );
 
-
         }
-
 
     }
 
 );
-
-
-
 
 
 // =======================================
@@ -124,19 +113,19 @@ passport.use(
 
             clientID:
 
-                process.env.GOOGLE_CLIENT_ID,
+                config.googleClientId,
 
 
 
             clientSecret:
 
-                process.env.GOOGLE_CLIENT_SECRET,
+                config.googleClientSecret,
 
 
 
             callbackURL:
 
-                process.env.GOOGLE_CALLBACK_URL_LOCAL
+                config.googleCallbackUrl
 
 
 

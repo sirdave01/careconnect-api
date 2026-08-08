@@ -1,9 +1,6 @@
 // =======================================
 // User Routes
 // =======================================
-// Defines all HTTP endpoints related to
-// user management.
-// =======================================
 
 import { Router } from "express";
 
@@ -38,37 +35,33 @@ import {
 
 const router = Router();
 
-
-
 // =======================================
 // GET /api/users
-// Retrieve all users
 // =======================================
-
 /*
     #swagger.tags = ['Users']
     #swagger.summary = 'Retrieve all users'
     #swagger.description = 'Returns all registered users.'
 */
-
 router.get(
     "/",
     asyncHandler(getAllUsers)
 );
 
-
-
 // =======================================
 // GET /api/users/:id
-// Retrieve one user
 // =======================================
-
 /*
     #swagger.tags = ['Users']
     #swagger.summary = 'Retrieve a single user'
     #swagger.description = 'Returns a user by MongoDB ObjectId.'
+    #swagger.parameters['id'] = {
+        in: 'path',
+        description: 'User MongoDB ObjectId',
+        required: true,
+        type: 'string'
+    }
 */
-
 router.get(
     "/:id",
     mongoIdValidator,
@@ -76,34 +69,32 @@ router.get(
     asyncHandler(getUser)
 );
 
-
-
 // =======================================
 // POST /api/users
-// Create new user
 // =======================================
-
 /*
     #swagger.tags = ['Users']
     #swagger.summary = 'Create a new user'
-    #swagger.description = 'Creates a new CareConnect user.'
-
+    #swagger.description = 'Creates a new CareConnect user (normally handled by Google OAuth).'
     #swagger.requestBody = {
         required: true,
         content: {
             "application/json": {
                 schema: {
-                    firstName: "Caleb",
-                    lastName: "Osigwe",
-                    email: "caleb@example.com",
-                    password: "password123",
-                    role: "user"
+                    $ref: "#/definitions/User"
+                },
+                example: {
+                    firstName: "David",
+                    lastName: "Caleb",
+                    email: "david@example.com",
+                    role: "patient",
+                    googleId: "112233445566778899",
+                    profileImage: "https://lh3.googleusercontent.com/a/..."
                 }
             }
         }
     }
 */
-
 router.post(
     "/",
     createUserValidator,
@@ -111,33 +102,39 @@ router.post(
     asyncHandler(createUser)
 );
 
-
-
 // =======================================
-// PUT /api/users/:id
-// Update user
+// PUT /api/users/:id   ← Protected
 // =======================================
-
 /*
     #swagger.tags = ['Users']
     #swagger.summary = 'Update a user'
-    #swagger.description = 'Updates an existing user.'
-
+    #swagger.description = 'Updates an existing user. Requires authentication.'
+    #swagger.parameters['id'] = {
+        in: 'path',
+        description: 'User MongoDB ObjectId',
+        required: true,
+        type: 'string'
+    }
+    #swagger.security = [{
+        sessionAuth: []
+    }]
     #swagger.requestBody = {
         required: true,
         content: {
             "application/json": {
                 schema: {
+                    $ref: "#/definitions/User"
+                },
+                example: {
                     firstName: "Updated",
-                    lastName: "User",
-                    email: "updated@example.com",
-                    role: "doctor"
+                    lastName: "Name",
+                    role: "doctor",
+                    profileImage: "https://example.com/new-avatar.jpg"
                 }
             }
         }
     }
 */
-
 router.put(
     "/:id",
     isAuthenticated,
@@ -147,19 +144,23 @@ router.put(
     asyncHandler(updateUser)
 );
 
-
-
 // =======================================
-// DELETE /api/users/:id
-// Delete user
+// DELETE /api/users/:id   ← Protected
 // =======================================
-
 /*
     #swagger.tags = ['Users']
     #swagger.summary = 'Delete a user'
-    #swagger.description = 'Deletes a user by MongoDB ObjectId.'
+    #swagger.description = 'Deletes a user by MongoDB ObjectId. Requires authentication.'
+    #swagger.parameters['id'] = {
+        in: 'path',
+        description: 'User MongoDB ObjectId',
+        required: true,
+        type: 'string'
+    }
+    #swagger.security = [{
+        sessionAuth: []
+    }]
 */
-
 router.delete(
     "/:id",
     isAuthenticated,

@@ -1,0 +1,104 @@
+############################################################
+### CARECONNECT API - APPOINTMENTS
+############################################################
+
+@baseUrl = http://localhost:3000
+
+
+############################################################
+### APPOINTMENTS
+############################################################
+
+
+### Get All Appointments
+
+GET {{baseUrl}}/api/appointments
+
+###
+
+
+############################################################
+### Get Appointment By ID
+############################################################
+
+@appointmentId = PUT_APPOINTMENT_ID_HERE
+
+GET {{baseUrl}}/api/appointments/{{appointmentId}}
+
+###
+
+
+############################################################
+### Create Appointment
+############################################################
+
+POST {{baseUrl}}/api/appointments
+Content-Type: application/json
+
+{
+    "patientId": "PUT_PATIENT_ID_HERE",
+    "doctorId": "PUT_DOCTOR_ID_HERE",
+    "appointmentDate": "2026-08-15",
+    "appointmentTime": "10:30 AM",
+    "reason": "Routine medical consultation",
+    "status": "pending",
+    "notes": "Patient requested morning appointment"
+}
+
+###
+
+
+############################################################
+### Update Appointment
+############################################################
+
+PUT {{baseUrl}}/api/appointments/{{appointmentId}}
+Content-Type: application/json
+
+{
+    "appointmentDate": "2026-08-16",
+    "appointmentTime": "11:00 AM",
+    "status": "approved",
+    "notes": "Appointment confirmed by doctor"
+}
+
+###
+
+
+############################################################
+### Update Appointment Status
+############################################################
+
+PUT {{baseUrl}}/api/appointments/{{appointmentId}}
+Content-Type: application/json
+
+{
+    "status": "completed",
+    "notes": "Consultation completed successfully"
+}
+
+###
+
+
+############################################################
+### Cancel Appointment
+############################################################
+
+PUT {{baseUrl}}/api/appointments/{{appointmentId}}
+Content-Type: application/json
+
+{
+    "status": "cancelled",
+    "notes": "Patient cancelled appointment"
+}
+
+###
+
+
+############################################################
+### Delete Appointment
+############################################################
+
+DELETE {{baseUrl}}/api/appointments/{{appointmentId}}
+
+###

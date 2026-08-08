@@ -21,11 +21,21 @@ import passport from "passport";
 // Load Passport configuration
 import "./src/config/passport.js";
 
+// swagger documention imports
+import swaggerUi from "swagger-ui-express";
 
+import swaggerDocument from "./src/docs/swagger-output.json" with { type: "json" };
 
 // Import routes
 import userRoutes from "./src/routes/userRoutes.js";
 
+import patientRoutes from "./src/routes/patientRoutes.js";
+
+import doctorRoutes from "./src/routes/doctorRoutes.js";
+
+import appointmentRoutes from "./src/routes/appointmentRoutes.js";
+
+import authRoutes from "./src/routes/authRoutes.js";
 
 
 // Import middleware
@@ -159,12 +169,29 @@ app.use(
 );
 
 
+// =======================================
+// Swagger Documentation
+// =======================================
 
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument)
+);
 
 
 // =======================================
 // API Routes
 // =======================================
+
+// =======================================
+// Authentication Routes
+// =======================================
+
+app.use(
+    "/api/auth",
+    authRoutes
+);
 
 
 app.use(
@@ -175,7 +202,29 @@ app.use(
 
 );
 
+app.use(
 
+    "/api/patients",
+
+    patientRoutes
+
+);
+
+app.use(
+
+    "/api/doctors",
+
+    doctorRoutes
+
+);
+
+app.use(
+
+    "/api/appointments",
+
+    appointmentRoutes
+    
+);
 
 
 

@@ -1,0 +1,77 @@
+############################################################
+### CARECONNECT API - PATIENTS
+############################################################
+
+@baseUrl = http://localhost:3000
+
+
+############################################################
+### PATIENTS
+############################################################
+
+
+### Get All Patients
+
+GET {{baseUrl}}/api/patients
+
+###
+
+
+############################################################
+### Get Patient By ID
+############################################################
+
+@patientId = PUT_PATIENT_ID_HERE
+
+GET {{baseUrl}}/api/patients/{{patientId}}
+
+###
+
+
+############################################################
+### Create Patient
+############################################################
+
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+    "userId": "PUT_USER_ID_HERE",
+    "firstName": "John",
+    "lastName": "Doe",
+    "gender": "male",
+    "dateOfBirth": "1995-05-10",
+    "phoneNumber": "08012345678",
+    "address": "Lagos, Nigeria",
+    "bloodType": "O+",
+    "emergencyContact": "Jane Doe - 08098765432",
+    "medicalHistory": "No known allergies"
+}
+
+###
+
+
+############################################################
+### Update Patient
+############################################################
+
+PUT {{baseUrl}}/api/patients/{{patientId}}
+Content-Type: application/json
+
+{
+    "firstName": "John Updated",
+    "phoneNumber": "08011112222",
+    "address": "Abuja, Nigeria",
+    "medicalHistory": "Updated medical history"
+}
+
+###
+
+
+############################################################
+### Delete Patient
+############################################################
+
+DELETE {{baseUrl}}/api/patients/{{patientId}}
+
+###

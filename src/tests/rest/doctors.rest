@@ -1,0 +1,76 @@
+############################################################
+### CARECONNECT API - DOCTORS
+############################################################
+
+@baseUrl = http://localhost:3000
+
+
+############################################################
+### DOCTORS
+############################################################
+
+
+### Get All Doctors
+
+GET {{baseUrl}}/api/doctors
+
+###
+
+
+############################################################
+### Get Doctor By ID
+############################################################
+
+@doctorId = PUT_DOCTOR_ID_HERE
+
+GET {{baseUrl}}/api/doctors/{{doctorId}}
+
+###
+
+
+############################################################
+### Create Doctor
+############################################################
+
+POST {{baseUrl}}/api/doctors
+Content-Type: application/json
+
+{
+    "userId": "PUT_USER_ID_HERE",
+    "firstName": "Sarah",
+    "lastName": "Williams",
+    "specialization": "Cardiology",
+    "licenseNumber": "MED-NG-10001",
+    "yearsOfExperience": 8,
+    "hospital": "CareConnect Medical Center",
+    "phoneNumber": "08012345678",
+    "availability": "Monday - Friday, 9:00 AM - 4:00 PM"
+}
+
+###
+
+
+############################################################
+### Update Doctor
+############################################################
+
+PUT {{baseUrl}}/api/doctors/{{doctorId}}
+Content-Type: application/json
+
+{
+    "specialization": "General Cardiology",
+    "hospital": "CareConnect Specialist Hospital",
+    "phoneNumber": "08099998888",
+    "availability": "Monday - Friday, 10:00 AM - 5:00 PM"
+}
+
+###
+
+
+############################################################
+### Delete Doctor
+############################################################
+
+DELETE {{baseUrl}}/api/doctors/{{doctorId}}
+
+###

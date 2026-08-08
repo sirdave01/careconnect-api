@@ -67,13 +67,12 @@ const userSchema = new mongoose.Schema(
 
         enum:[
 
-            "user",
             "doctor",
-            "admin"
+            "patient"
 
         ],
 
-        default:"user"
+        default:"patient"
 
     }
 
