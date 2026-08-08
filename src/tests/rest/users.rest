@@ -40,10 +40,8 @@ Content-Type: application/json
 {
     "firstName": "David",
     "lastName": "Caleb",
-    "username": "davidcaleb",
     "email": "david@example.com",
-    "password": "Password123!",
-    "role": "user"
+    "role": "patient"
 }
 
 

@@ -16,23 +16,26 @@ export const createUserValidator = [
         .isLength({ min: 2, max: 50 })
         .withMessage("Last name must be between 2 and 50 characters"),
 
-    body("username")
-        .trim()
-        .notEmpty()
-        .withMessage("Username is required")
-        .isLength({ min: 3, max: 30 })
-        .withMessage("Username must be between 3 and 30 characters"),
-
     body("email")
         .trim()
         .isEmail()
         .withMessage("Please provide a valid email address")
         .normalizeEmail(),
+    
+    body("role")
+        .optional()
+        .isIn(["patient", "doctor"])
+        .withMessage("Role must be either patient or doctor"),
 
-    body("password")
-        .isLength({ min: 8 })
-        .withMessage("Password must be at least 8 characters long")
+    body("googleId")
+        .optional()
+        .isString()
+        .withMessage("googleId must be a string"),
 
+    body("profileImage")
+        .optional()
+        .isURL()
+        .withMessage("profileImage must be a valid URL")
 ];
 
 export const updateUserValidator = [
@@ -47,18 +50,19 @@ export const updateUserValidator = [
         .trim()
         .isLength({ min: 2, max: 50 }),
 
-    body("username")
-        .optional()
-        .trim()
-        .isLength({ min: 3, max: 30 }),
-
     body("email")
         .optional()
         .isEmail()
         .normalizeEmail(),
-
-    body("password")
+    
+    body("role")
         .optional()
-        .isLength({ min: 8 })
+        .isIn(["patient", "doctor"])
+        .withMessage("Role must be either patient or doctor"),
+
+    body("profileImage")
+        .optional()
+        .isURL()
+        .withMessage("profileImage must be a valid URL")
 
 ];
