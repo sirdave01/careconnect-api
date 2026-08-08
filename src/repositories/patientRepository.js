@@ -5,7 +5,7 @@
 // =======================================
 
 
-import Patient from "../models/Patient.js";
+import Patient from "../models/patient.js";
 
 
 
