@@ -144,7 +144,7 @@ cookie after successful authentication.
 
     host: isProduction
 
-        ? "YOUR-CARECONNECT-API.onrender.com"
+        ? "https://careconnect-api-a8af.onrender.com"
 
         : "localhost:3000",
 
