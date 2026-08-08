@@ -5,9 +5,9 @@
     "description": "REST API for the CareConnect Healthcare Appointment and Patient Management System.\n\n## Authentication\nCareConnect uses Passport.js + Google OAuth (session cookie).\n\n1. Visit `/api/auth/google` in the browser (do **not** use Try it out).\n2. Sign in with Google.\n3. You will be redirected back and a session cookie (`connect.sid`) is set.\n4. Protected endpoints can now be tested in Swagger UI.\n\n## Auth Endpoints\n- Google Login: `/api/auth/google`\n- Google Callback: `/api/auth/google/callback`\n- Logout: `/api/auth/logout`\n- Current User: `/api/auth/me`",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "https://careconnect-api-a8af.onrender.com/",
   "basePath": "/",
-  "schemes": ["http"],
+  "schemes": ["https"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "securityDefinitions": {
